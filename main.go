@@ -23,12 +23,11 @@ type (
 		Token string `json:"token"`
 	}
 	Data struct {
-		Feature string `json:"feature"`
-		Body    string `json:"body"`
+		Body string `json:"body"`
 	}
 	Payload struct {
-		RegistrationIds []string `json:"registration_ids"`
-		Data            Data     `json:"data"`
+		To   string `json:"to"`
+		Data Data   `json:"notification"`
 	}
 	Student struct {
 		Id   int    `json:id`
@@ -133,10 +132,9 @@ func Push(c echo.Context) error {
 	fmt.Println("token la ", user.Tokens[0])
 	//payload
 	payload := Payload{
-		RegistrationIds: user.Tokens,
+		To: user.Tokens[len(user.Tokens)-1],
 		Data: Data{
-			Feature: "WELCOME",
-			Body:    "Hello, " + user.Email,
+			Body: "Hello, " + user.Email,
 		},
 	}
 
@@ -152,7 +150,7 @@ func pushNoti(payload []byte) {
 	req, _ := http.NewRequest("POST", "https://fcm.googleapis.com/fcm/send", bytes.NewBuffer(payload))
 
 	req.Header.Set("Content-Type", "application/json")
-	req.Header.Set("Authorization", "key=AAAAh3U5wVk:APA91bHlQLiXXR5iRjpSugLZxV36oCZpsDMhwYdq7Yn8GhYcWYRGYY11yKpfKOG-yjw-6sEMZMzfTppdQEJX0x-7_fKeOQr9XKNL-UF2qbRBiwHWIhvg8D6RMJqcOnaR0t7e5ffr1--a")
+	req.Header.Set("Authorization", "key=*-7_fKeOQr9XKNL-UF2qbRBiwHWIhvg8D6RMJqcOnaR0t7e5ffr1--a")
 
 	client := &http.Client{}
 	res, _ := client.Do(req)
